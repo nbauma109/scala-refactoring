@@ -29,7 +29,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       package x.y
       class ToMove
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def moveWithoutEmptyLineAtEOF() = new FileSet {
@@ -49,7 +49,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class /*(*/ToMove/*)*/ {
    } """
-  } applyRefactoring(moveTo("hehe"))
+  } applyRefactoring(moveTo("hehe") _)
 
   @Test
   def moveFromDefaultPackage() = new FileSet {
@@ -63,7 +63,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class ToMove
     """
-  } applyRefactoring(moveTo("a.b"))
+  } applyRefactoring(moveTo("a.b") _)
 
   @Test
   def moveToParent() = new FileSet {
@@ -79,7 +79,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class ToMove
     """
-  } applyRefactoring(moveTo("a.b"))
+  } applyRefactoring(moveTo("a.b") _)
 
   @Test
   def moveToSubpackage() = new FileSet {
@@ -93,7 +93,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class ToMove
     """
-  } applyRefactoring(moveTo("a.b.c"))
+  } applyRefactoring(moveTo("a.b.c") _)
 
   @Test
   def moveObjectBetweenPackages() = new FileSet {
@@ -106,7 +106,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       package x.y
       object ObjectToMove
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def moveBetweenNestedPackages() = new FileSet {
@@ -120,7 +120,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       package x.y
       class ToMove
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def moveBetweenSubPackage() = new FileSet {
@@ -134,7 +134,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       package other
       class ToMove
     """
-  } applyRefactoring(moveTo("org.com.other"))
+  } applyRefactoring(moveTo("org.com.other") _)
 
   @Test
   def moveToSuperPackage() = new FileSet {
@@ -147,7 +147,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       package org.com
       class ToMove
     """
-  } applyRefactoring(moveTo("org.com"))
+  } applyRefactoring(moveTo("org.com") _)
 
   @Test
   def moveOneFromManyWithSelfReference() = new FileSet {
@@ -175,7 +175,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
         var x: ToMove = _
       }
     """
-  } applyRefactoring(moveTo("org.com"))
+  } applyRefactoring(moveTo("org.com") _)
 
   @Test
   def moveOneFromMany() = new FileSet {
@@ -199,7 +199,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class /*(*/ToMove/*)*/
     """
-  } applyRefactoring(moveTo("org.com"))
+  } applyRefactoring(moveTo("org.com") _)
 
   @Test
   def moveOneFromManyWithDoc() = new FileSet {
@@ -236,7 +236,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
        **/
       class /*(*/ToMove/*)*/
     """
-  } applyRefactoring(moveTo("org.com.whatever"))
+  } applyRefactoring(moveTo("org.com.whatever") _)
 
   @Test
   def moveClassWithImplementation() = new FileSet {
@@ -273,7 +273,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
         def someMethod = 42
       }
     """
-  } applyRefactoring(moveTo("ch.misto"))
+  } applyRefactoring(moveTo("ch.misto") _)
 
   @Test
   def moveClassesWithImports() = new FileSet {
@@ -304,7 +304,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
         var lb: ListBuffer[Int] = _
       }
     """
-  } applyRefactoring(moveTo("ch.misto"))
+  } applyRefactoring(moveTo("ch.misto") _)
 
   @Test
   def wildcardsNotExpanded() = new FileSet {
@@ -327,7 +327,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
         var lb: ListBuffer[Int] = _
       }
     """
-  } applyRefactoring(moveTo("ch.misto"))
+  } applyRefactoring(moveTo("ch.misto") _)
 
   @Test
   def moveClassWithImports() = new FileSet {
@@ -365,7 +365,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
         var lb: ListBuffer[Int] = _
       }
     """
-  } applyRefactoring(moveTo("ch.misto"))
+  } applyRefactoring(moveTo("ch.misto") _)
 
   @Test
   def moveClassThatExtendsFromRequiredImport() = new FileSet {
@@ -405,7 +405,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
         def compare(i1: Int, i2: Int) = 0
       }
     """
-  } applyRefactoring(moveTo("ch.misto"))
+  } applyRefactoring(moveTo("ch.misto") _)
 
   @Test
   def moveClassWithDepOnCurrentPackage() = new FileSet {
@@ -432,7 +432,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       trait /*(*/B/*)*/ extends A
     """
-  } applyRefactoring(moveTo("org.com.other"))
+  } applyRefactoring(moveTo("org.com.other") _)
 
   @Test
   def copyrightHeaderIsMovedAlong() = new FileSet {
@@ -461,7 +461,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class /*(*/B/*)*/(a: A)
     """
-  } applyRefactoring(moveTo("ch.hsr"))
+  } applyRefactoring(moveTo("ch.hsr") _)
 
   @Test
   def moveWithAdaptedImport() = new FileSet {
@@ -490,7 +490,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class User extends MoveIt
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def moveMulipleClassesWithAdaptedImport() = new FileSet {
@@ -523,7 +523,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class User extends MoveIt with MoveAlso
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def needImportToOriginatingPackage() = new FileSet {
@@ -549,7 +549,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
         self: X =>
       }
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def moveWithAdaptedImportWithManySelectors() = new FileSet {
@@ -585,7 +585,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class User extends ToMove
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def moveClassWithMultipleDependenciesOnCurrentFile() = new FileSet {
@@ -619,7 +619,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       }
     }
     """
-  } applyRefactoring(moveTo("a.b.c.d"))
+  } applyRefactoring(moveTo("a.b.c.d") _)
 
   @Test
   def adaptFQN() = new FileSet {
@@ -640,7 +640,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       package m.n
       class User extends x.y.ToMove
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def adaptReferenceFromSamePackage() = new FileSet {
@@ -665,7 +665,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class User extends ToMove
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def adaptReferenceInValDefWithoutImport() = new FileSet {
@@ -693,7 +693,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class User(x: ToMove)
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def adaptReferenceInValDefWithImport() = new FileSet {
@@ -716,7 +716,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       import x.y.ToMove
       class User(x: ToMove)
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def adaptReferenceFromSubPackage() = new FileSet {
@@ -740,7 +740,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       package d
       class User extends x.y.ToMove
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def moveMultipleClassesWithInterdependencies() = new FileSet {
@@ -776,7 +776,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       }
     }
     """
-  } applyRefactoring(moveTo("org.scala-refactoring"))
+  } applyRefactoring(moveTo("org.scala-refactoring") _)
 
   @Test
   def moveToDefaultPackage() = new FileSet {
@@ -796,7 +796,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       val B = 3
     }
     """
-  } applyRefactoring(moveTo(""))
+  } applyRefactoring(moveTo("") _)
 
   @Test
   def moveCompanionObjectAlongNoOtherImpls() = new FileSet {
@@ -810,7 +810,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
     object /*(*/BFF/*)*/
     class BFF
     """
-  } applyRefactoring(moveTo("bff"))
+  } applyRefactoring(moveTo("bff") _)
 
   @Ignore
   @Test
@@ -824,7 +824,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
     class Outsider
     """
     NewFile becomes """""""
-  } applyRefactoring(moveTo("bff"))
+  } applyRefactoring(moveTo("bff") _)
 
   @Test
   def moveFromDefaultPackageNoImports() = new FileSet {
@@ -842,7 +842,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       val B = 3
     }
     """
-  } applyRefactoring(moveTo("ctes"))
+  } applyRefactoring(moveTo("ctes") _)
 
   @Test
   def updateReferencesToMovedObject() = new FileSet {
@@ -879,7 +879,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
     |  def bar = Bar64.instance.toString
     |}
     |""".stripMargin.trim
-  } applyRefactoring(moveTo("bar"))
+  } applyRefactoring(moveTo("bar") _)
 
   @Test
   def nestedPackageAndImports() = new FileSet(expectCompilingCode = false) {
@@ -910,7 +910,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
       package x.y
       class Dependency
     """
-  } applyRefactoring(moveTo("x.z"))
+  } applyRefactoring(moveTo("x.z") _)
 
   @Test
   def adaptLotsOfReferences() = new FileSet {
@@ -959,7 +959,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class User(what: ToMove) extends ToMove
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def moveManyClassesAdaptReferences() = new FileSet {
@@ -1007,7 +1007,7 @@ class MoveClassTest extends TestHelper with TestRefactoring {
 
       class X extends Cc with x.y.Bb
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   @Test
   def moveObject() = new FileSet {
@@ -1047,7 +1047,7 @@ object /*(*/Arith/*)*/ {
   }
 }
     """
-  } applyRefactoring(moveTo("x.y"))
+  } applyRefactoring(moveTo("x.y") _)
 
   /*
    * See Assembla Ticket 1002511
@@ -1060,7 +1060,7 @@ object /*(*/Arith/*)*/ {
     object O {
       def ? : String = ???
     }
-    """ isNotModified();
+    """.isNotModified();
     """
     package p1
 
@@ -1081,7 +1081,7 @@ object /*(*/Arith/*)*/ {
       def f = ?
     }
     """
-  } applyRefactoring(moveTo("p1.p2"))
+  } applyRefactoring(moveTo("p1.p2") _)
 
   /*
    * See Assembla Ticket 1002511
@@ -1094,7 +1094,7 @@ object /*(*/Arith/*)*/ {
     object O {
       def ? : String = ???
     }
-    """ isNotModified();
+    """.isNotModified();
     """
     package p1
 
@@ -1111,7 +1111,7 @@ object /*(*/Arith/*)*/ {
       def f = O.?
     }
     """
-  } applyRefactoring(moveTo("p1.p2"))
+  } applyRefactoring(moveTo("p1.p2") _)
 
   /*
    * See Assembla Ticket 1002511
@@ -1124,7 +1124,7 @@ object /*(*/Arith/*)*/ {
     object O {
       def a : String = ???
     }
-    """ isNotModified();
+    """.isNotModified();
     """
     package p1
 
@@ -1145,7 +1145,7 @@ object /*(*/Arith/*)*/ {
       def f = a
     }
     """
-  } applyRefactoring(moveTo("p1.p2"))
+  } applyRefactoring(moveTo("p1.p2") _)
 
   /*
    * See Assembla Ticket 1002512
@@ -1160,7 +1160,7 @@ object /*(*/Arith/*)*/ {
     }
 
     class X
-    """ isNotModified();
+    """.isNotModified();
     """
     package p1
 
@@ -1184,7 +1184,7 @@ object /*(*/Arith/*)*/ {
       def f: X = ""
     }
     """
-  } applyRefactoring(moveTo("p1.p2"))
+  } applyRefactoring(moveTo("p1.p2") _)
 
   /*
    * See Assembla Ticket 1002723
@@ -1195,7 +1195,7 @@ object /*(*/Arith/*)*/ {
     package com.github.mlangc.experiments.v1.move.me.here
 
     class DepInTargetPackage
-    """ isNotModified()
+    """.isNotModified()
 
     """
     package com.github.mlangc.experiments.v1
@@ -1230,7 +1230,7 @@ object /*(*/Arith/*)*/ {
       val use = new MoveMe
     }
     """
-  } applyRefactoring(moveTo("com.github.mlangc.experiments.v1.move.me.here"))
+  } applyRefactoring(moveTo("com.github.mlangc.experiments.v1.move.me.here") _)
 
   @Test
   def moveToPackageWithDepsAndMultipleUsers1002723() = new FileSet {
@@ -1238,13 +1238,13 @@ object /*(*/Arith/*)*/ {
     package com.github.mlangc.experiments.v2
 
     class DepInSourcePackage
-    """ isNotModified()
+    """.isNotModified()
 
     """
     package com.github.mlangc.experiments.v2.move.me.here
 
     class DepInTargetPackage
-    """ isNotModified()
+    """.isNotModified()
 
     """
     package com.github.mlangc.experiments.v2
@@ -1300,7 +1300,7 @@ object /*(*/Arith/*)*/ {
       val usr = new MoveMe
     }
     """
-  } applyRefactoring(moveTo("com.github.mlangc.experiments.v2.move.me.here"))
+  } applyRefactoring(moveTo("com.github.mlangc.experiments.v2.move.me.here") _)
 
   @Test
   def moveToPackageWithRenamedDeps() = new FileSet {
@@ -1308,13 +1308,13 @@ object /*(*/Arith/*)*/ {
     package com.github.mlangc.experiments.v4
 
     class DepInSourcePackage
-    """ isNotModified()
+    """.isNotModified()
 
     """
     package com.github.mlangc.experiments.v4.move.me.here
 
     class DepInTargetPackage
-    """ isNotModified()
+    """.isNotModified()
 
     """
     package com.github.mlangc.experiments.v4
@@ -1338,7 +1338,7 @@ object /*(*/Arith/*)*/ {
       val tDep = new Tdep
     }
     """
-  } applyRefactoring(moveTo("com.github.mlangc.experiments.v4.move.me.here"))
+  } applyRefactoring(moveTo("com.github.mlangc.experiments.v4.move.me.here") _)
 
   /*
    * See Assembla Ticket 1002761
@@ -1372,7 +1372,7 @@ object /*(*/Arith/*)*/ {
       val dep = new MoveMe
     }
     """
-  } applyRefactoring(moveTo("com.github.mlangc.experiments.v1.dst.pkg"))
+  } applyRefactoring(moveTo("com.github.mlangc.experiments.v1.dst.pkg") _)
 
   @Test
   def moveClassReferencedInMethodLevelImport1002761() = new FileSet {
@@ -1407,7 +1407,7 @@ object /*(*/Arith/*)*/ {
       }
     }
     """
-  } applyRefactoring(moveTo("com.github.mlangc.experiments.v2.dst.pkg"))
+  } applyRefactoring(moveTo("com.github.mlangc.experiments.v2.dst.pkg") _)
 
   /*
    * See Assembla Ticket 1002785
@@ -1445,7 +1445,7 @@ object /*(*/Arith/*)*/ {
       val fullyQualified = new com.github.mlangc.experiments.v1.dst.pkg.MoveMe
     }
     """
-  } applyRefactoring(moveTo("com.github.mlangc.experiments.v1.dst.pkg"))
+  } applyRefactoring(moveTo("com.github.mlangc.experiments.v1.dst.pkg") _)
 
   /*
    * See Assembla Ticket 1002786
@@ -1469,7 +1469,7 @@ object /*(*/Arith/*)*/ {
     class MoveMe {
       def trapped: Int = 42
     }
-    """ isNotModified()
+    """.isNotModified()
 
     """
     package com.github.mlangc.experiments
@@ -1495,5 +1495,5 @@ object /*(*/Arith/*)*/ {
       val trap = new MoveMe().trapped
     }
     """
-  } applyRefactoring(moveTo("com.github.mlangc.experiments.dst.pkg"))
+  } applyRefactoring(moveTo("com.github.mlangc.experiments.dst.pkg") _)
 }

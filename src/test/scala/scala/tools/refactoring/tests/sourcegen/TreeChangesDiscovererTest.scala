@@ -8,6 +8,7 @@ package tests.sourcegen
 import tests.util.TestHelper
 import org.junit.Assert._
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class TreeChangesDiscovererTest extends TestHelper {
 
   import global._

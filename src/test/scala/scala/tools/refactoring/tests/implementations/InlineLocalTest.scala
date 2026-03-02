@@ -10,6 +10,7 @@ import tests.util.TestRefactoring
 import tests.util.TestHelper
 
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class InlineLocalTest extends TestHelper with TestRefactoring {
   outer =>
 
@@ -527,6 +528,7 @@ class InlineLocalTest extends TestHelper with TestRefactoring {
   } applyRefactoring(inline)
 
   @Test
+  @ScalaVersion(matches = "2.11")
   def inlineInListConcatenation() = new FileSet {
     """
      class InlineTest {

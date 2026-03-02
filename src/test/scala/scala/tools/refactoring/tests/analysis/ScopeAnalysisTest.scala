@@ -5,6 +5,7 @@ import scala.tools.refactoring.tests.util.TestHelper
 
 import org.junit.Assert._
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ScopeAnalysisTest extends TestHelper with ScopeAnalysis {
   import global._
 

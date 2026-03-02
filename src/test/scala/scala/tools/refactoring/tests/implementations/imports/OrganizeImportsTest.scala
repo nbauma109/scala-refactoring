@@ -8,6 +8,7 @@ import scala.language.postfixOps
 import scala.tools.refactoring.implementations.OrganizeImports
 import scala.tools.refactoring.implementations.OrganizeImports.Dependencies
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class OrganizeImportsTest extends OrganizeImportsBaseTest {
   private def organize(pro: FileSet) = new OrganizeImportsRefatoring(pro) {
     val oiConfig = OrganizeImports.OrganizeImportsConfig(importsStrategy = Some(OrganizeImports.ImportsStrategy.CollapseImports))

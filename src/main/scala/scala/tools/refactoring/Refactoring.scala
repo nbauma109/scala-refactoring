@@ -71,7 +71,7 @@ trait Refactoring extends Selections with TreeTransformations with TracingImpl w
       def commonPrefixLength(s1: Seq[Char], s2: Seq[Char]) =
         (s1 zip s2 takeWhile Function.tupled(_ == _)).length
 
-      val original = file.content.subSequence(from, to).toString
+      val original = file.content.slice(from, to).mkString
       val replacement = changeText
 
       val commonStart = commonPrefixLength(original, replacement)

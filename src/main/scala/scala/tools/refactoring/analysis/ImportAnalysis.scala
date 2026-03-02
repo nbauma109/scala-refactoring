@@ -14,7 +14,7 @@ trait ImportAnalysis extends TreeFactory with EnrichedTrees with TreeTransformat
    *
    * Import trees are constructed with `ImportTree.build()`.
    */
-  sealed trait ImportTree extends Traversable[ImportTree] {
+  sealed trait ImportTree {
     /**
      * An AST tree that encloses the according import statement.
      */
@@ -90,7 +90,7 @@ trait ImportAnalysis extends TreeFactory with EnrichedTrees with TreeTransformat
     /**
      * Enables breadth-first traversing of ImportTrees.
      */
-    def foreach[U](f: ImportTree => U) = {
+    def foreach[U](f: ImportTree => U): Unit = {
       f(this)
       children.foreach(_.foreach(f))
     }

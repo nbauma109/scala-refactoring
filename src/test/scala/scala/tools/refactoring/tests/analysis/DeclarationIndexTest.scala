@@ -9,6 +9,7 @@ import tests.util._
 import org.junit.Assert._
 import analysis._
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class DeclarationIndexTest extends TestHelper with GlobalIndexes with TreeAnalysis with FreshCompilerForeachTest {
 
   import global._

@@ -10,6 +10,7 @@ import tests.util.TestRefactoring
 import tests.util.TestHelper
 
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ExtractLocalTest extends TestHelper with TestRefactoring {
   outer =>
 

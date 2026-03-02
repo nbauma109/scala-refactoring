@@ -8,6 +8,7 @@ package tests.implementations.imports
 import sourcegen.Formatting
 import scala.tools.refactoring.implementations.OrganizeImports
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class PrependOrDropScalaPackageFromRecomputedTest extends OrganizeImportsBaseTest {
   def organizeDropScalaPackage(pro: FileSet) = new OrganizeImportsRefatoring(pro, new Formatting { override val dropScalaPackage = true }) {
     val oiConfig = OrganizeImports.OrganizeImportsConfig(None, scalaPackageStrategy = true)

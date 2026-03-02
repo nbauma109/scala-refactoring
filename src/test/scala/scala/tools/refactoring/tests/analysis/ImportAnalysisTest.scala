@@ -4,6 +4,7 @@ import scala.tools.refactoring.tests.util.TestHelper
 import scala.tools.refactoring.analysis.ImportAnalysis
 import org.junit.Assert._
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ImportAnalysisTest extends TestHelper with ImportAnalysis {
   import global._
 

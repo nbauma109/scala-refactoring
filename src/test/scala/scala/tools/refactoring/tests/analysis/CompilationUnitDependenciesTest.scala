@@ -12,6 +12,7 @@ import common.TreeExtractors
 import tests.util.FreshCompilerForeachTest
 import tests.util.TestHelper
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class CompilationUnitDependenciesTest extends TestHelper with CompilationUnitDependencies with TreeExtractors with FreshCompilerForeachTest {
 
   import global._

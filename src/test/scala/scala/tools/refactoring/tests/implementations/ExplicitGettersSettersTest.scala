@@ -10,6 +10,7 @@ import tests.util.TestHelper
 import tests.util.TestRefactoring
 
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ExplicitGettersSettersTest extends TestHelper with TestRefactoring {
   outer =>
 

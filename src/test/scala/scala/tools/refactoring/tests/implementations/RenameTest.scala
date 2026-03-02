@@ -13,6 +13,7 @@ import tests.util.TestHelper
 import tests.util.TestHelper.PrepResultWithChanges
 import tests.util.TestRefactoring
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class RenameTest extends TestHelper with TestRefactoring {
   outer =>
 
@@ -42,7 +43,7 @@ class RenameTest extends TestHelper with TestRefactoring {
     trait Bar[T]
     class /*(*/Ups/*)*/[T : Bar]
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups") _)
 
 
   /*
@@ -84,7 +85,7 @@ class RenameTest extends TestHelper with TestRefactoring {
       def apply(): O = ???
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithDefaultArgs1002611Ex2() = new FileSet {
@@ -122,7 +123,7 @@ class RenameTest extends TestHelper with TestRefactoring {
       def apply(): O = ???
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithDefaultArgs1002611Ex3() = new FileSet {
@@ -160,7 +161,7 @@ class RenameTest extends TestHelper with TestRefactoring {
       def apply(): O = ???
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameSimilarButNotAffectedBy1002611Ex1() = new FileSet {
@@ -198,7 +199,7 @@ class RenameTest extends TestHelper with TestRefactoring {
       def apply(): O = ???
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   /*
    * See Assembla Ticket 1002537
@@ -238,7 +239,7 @@ class RenameTest extends TestHelper with TestRefactoring {
       def x: Class = ???
     }
     """
-  } prepareAndApplyRefactoring(prepareAndRenameTo("X"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("X") _)
 
   @Test
   def renameOverlapping() = new FileSet {
@@ -1848,7 +1849,7 @@ class Blubb
       def x = new Bug(32).z
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("z"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("z") _)
 
   /*
    * See Assembla ticket #1002435
@@ -1872,7 +1873,7 @@ class Blubb
       def x = Bug(32).z
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("z"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("z") _)
 
   /*
    * See Assembla ticket #1002435
@@ -1902,7 +1903,7 @@ class Blubb
       def x = bug.x
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("x"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("x") _)
 
   @Test
   def testRenamePublicVarInPlainClass() = new FileSet {
@@ -1923,7 +1924,7 @@ class Blubb
       def x = new Bug(32).z
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("z"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("z") _)
 
   @Test
   def testRenamePrivateVarInPlainClass() = new FileSet {
@@ -1939,7 +1940,7 @@ class Blubb
       def test = z
     }
     """ -> TaggedAsLocalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("z"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("z") _)
 
   @Test
   def testRenamePkgPrivateVal() = new FileSet {
@@ -1964,7 +1965,7 @@ class Blubb
       def x = new Bug(32).z
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("z"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("z") _)
 
   /*
    * See Assembla Ticket #1002446
@@ -1983,7 +1984,7 @@ class Blubb
       private[bug] def /*(*/x/*)*/ = 99
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("x"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("x") _)
 
   @Test
   def testRenamePrivateThisVal() = new FileSet {
@@ -1997,7 +1998,7 @@ class Blubb
       private[this] val /*(*/z/*)*/ = 99
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("z"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("z") _)
 
   @Test
   def testRenameValWithCommentAfterModifier() = new FileSet {
@@ -2011,7 +2012,7 @@ class Blubb
       private/*--*/ val /*(*/z/*)*/ = 99
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("z"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("z") _)
 
   @Test
   def testRenamePkgPrivateValWithComments() = new FileSet {
@@ -2033,7 +2034,7 @@ class Blubb
       [/**/ bug /**/] val /*(*/z/*)*/ = 99
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("z"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("z") _)
 
   @Test
   def testRenamePkgProtectedDefWithComments() = new FileSet {
@@ -2057,7 +2058,7 @@ class Blubb
       [/**/ bug /**/] /**/ def /*(*/z/*)*/ = 99
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("z"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("z") _)
 
   /*
    * Correctly renaming package private lazy vals is not as easy as one might hope,
@@ -2075,7 +2076,7 @@ class Blubb
     class Clazz {
       private[experiments] lazy val /*(*/xy/*)*/ = 999
     }""" -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xy"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xy") _)
 
 
   /*
@@ -2115,7 +2116,7 @@ class Blubb
       override val /*(*/xyz/*)*/ = 99
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xyz"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xyz") _)
 
   /*
    * See Assembla Ticket 1002490
@@ -2506,7 +2507,7 @@ class Blubb
       }
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithDifferentValsWithSameName1002371Ex2() = new FileSet {
@@ -2530,7 +2531,7 @@ class Blubb
       }
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithDifferentValsWithSameName1002371Ex3() = new FileSet {
@@ -2552,7 +2553,7 @@ class Blubb
       }
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithDifferentValsWithSameName1002371Ex4() = new FileSet {
@@ -2580,7 +2581,7 @@ class Blubb
      val another = ups
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   /*
    * See Assembla Ticket 1002569
@@ -2601,7 +2602,7 @@ class Blubb
 
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("renamed"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("renamed") _)
 
   @Test
   def testRenameLazyConstants1002569Ex2() = new FileSet {
@@ -2627,7 +2628,7 @@ class Blubb
       def mkVal(i: Int) = i
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("renamed"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("renamed") _)
 
   @Test
   def testRenameLazyConstants1002569Ex3() = new FileSet {
@@ -2655,7 +2656,7 @@ class Blubb
       lazy val /*(*/renamed/*)*/ = 0
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("renamed"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("renamed") _)
 
   /*
    * See Assembla Ticket 1002502
@@ -2684,7 +2685,7 @@ class Blubb
       lazy val x = 99
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("x"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("x") _)
 
   /*
    * See Assembla Ticket 1002564
@@ -2719,7 +2720,7 @@ class Blubb
       def apply(): O = ???
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("test2"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("test2") _)
 
   @Test
   def testRenameSimilarTo1002564Ex1WithoutDefaultArgs() = new FileSet {
@@ -2751,7 +2752,7 @@ class Blubb
       def apply(): O = ???
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("test2"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("test2") _)
 
   @Test
   def testRenameWithDefaultArgs1002564Ex2() = new FileSet {
@@ -2783,7 +2784,7 @@ class Blubb
       def apply(): O = ???
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("meth2"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("meth2") _)
 
   @Test
   def testRenameWithDefaultArgs1002564Ex3() = new FileSet {
@@ -2811,7 +2812,7 @@ class Blubb
       cl.ohNo()
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ohNo"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ohNo") _)
 
   @Test
   def testRenameWithDefaultArgs1002564Ex4() = new FileSet {
@@ -2849,7 +2850,7 @@ class Blubb
       def apply(): O3 = ???
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("test2"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("test2") _)
 
   /*
    * See Assembla Ticket 1002609
@@ -2885,7 +2886,7 @@ class Blubb
       val bug = bugs.ups
     }
     """
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameMemberOfPkgObjs1002609Ex2() = new FileSet {
@@ -2918,7 +2919,7 @@ class Blubb
       val bug = bugs.ups
     }
     """
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameMemberOfPkgObjs1002609Ex3() = new FileSet {
@@ -2951,7 +2952,7 @@ class Blubb
       val bug = bugs.ups
     }
     """
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameMemberOfNormalObjectNotAffectedBy1002609Ex1() = new FileSet {
@@ -2984,7 +2985,7 @@ class Blubb
       val bug = Bugs.ups
     }
     """
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   /*
    * See Assembla Ticket 1001932
@@ -3001,7 +3002,7 @@ class Blubb
       def testFn: (List[Hanswurst], Int) = ???
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Hanswurst"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Hanswurst") _)
 
   @Test
   def testSimilarButNotAffectedBy1001932() = new FileSet {
@@ -3015,7 +3016,7 @@ class Blubb
       def testFn: Tuple2[List[Hanswurst], Int] = ???
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Hanswurst"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Hanswurst") _)
 
   /*
    * See Assembla Ticket 1002618
@@ -3052,7 +3053,7 @@ class Blubb
         Ups]
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups") _)
 
   @Test
   def testRenameBreaksCodeInGenericWithComments1002618Ex2() = new FileSet {
@@ -3086,7 +3087,7 @@ class Blubb
         Ups)
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups") _)
 
   @Test
   def testRenameFunWithMultlineParen1002620Ex1() = new FileSet {
@@ -3102,7 +3103,7 @@ class Blubb
           ) = 1
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameFunWithMultlineParen1002620Ex2() = new FileSet {
@@ -3120,7 +3121,7 @@ class Blubb
           ) = 1
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameFunWithMultlineParen1002620Ex3() = new FileSet {
@@ -3150,7 +3151,7 @@ class Blubb
           ) = 1
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameSimilarButNotAffectedBy1002620() = new FileSet {
@@ -3164,7 +3165,7 @@ class Blubb
       def /*(*/ups/*)*/() = 1
     }
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   /*
    * See Assembla Ticket 1002643
@@ -3211,7 +3212,7 @@ class Blubb
         listingCategory: String,
         listings: Ups.Listings)
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups") _)
 
   @Test
   def testRenameClassAddsParen1002643Ex2() = new FileSet {
@@ -3231,7 +3232,7 @@ class Blubb
     case class Ups(
         buggy: Ups.Listings)
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups") _)
 
   @Test
   def testRenameSimilarButNotAffected1002643() = new FileSet {
@@ -3249,7 +3250,7 @@ class Blubb
 
     case class Ups(buggy: Ups.Listings)
     """ -> TaggedAsGlobalRename;
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups") _)
 
   /*
    * See Assembla Ticket 1002622
@@ -3294,7 +3295,7 @@ class Blubb
       val /*(*/ups/*)*/ = Bug().withDefault()
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex1() = new FileSet {
@@ -3310,7 +3311,7 @@ class Blubb
       def g(a: Int, b: Int) = f(ups = a) + b
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex2() = new FileSet {
@@ -3326,7 +3327,7 @@ class Blubb
       def g(a: Int, b: Int) = f(ups = a) + b
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Ignore
   @Test
@@ -3343,7 +3344,7 @@ class Blubb
       def g(a: Int, b: Int) = f(/*(*/ups/*)*/ = a) + b
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex4() = new FileSet {
@@ -3359,7 +3360,7 @@ class Blubb
       new SomeClass(ups = 22)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex5() = new FileSet {
@@ -3375,7 +3376,7 @@ class Blubb
       new SomeClass(b = 5, ups = 33)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex6() = new FileSet {
@@ -3399,7 +3400,7 @@ class Blubb
       new ClassWithSecondaryCtor(ups = 3)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex7() = new FileSet {
@@ -3423,7 +3424,7 @@ class Blubb
       new ClassWithSecondaryCtor(tryRenameMe = 3)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex8() = new FileSet {
@@ -3437,7 +3438,7 @@ class Blubb
       CaseClass1(ups = 22)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex9() = new FileSet {
@@ -3451,7 +3452,7 @@ class Blubb
       CaseClass2(c = 0, ups = 22)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex10() = new FileSet {
@@ -3465,7 +3466,7 @@ class Blubb
       copy(ups = 12)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex11() = new FileSet {
@@ -3481,7 +3482,7 @@ class Blubb
       copy(ups = 18)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex12() = new FileSet {
@@ -3503,7 +3504,7 @@ class Blubb
       def apply(tryRenameMe: Int): CaseClass5 = CaseClass5(a = 10, ups = tryRenameMe)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex13() = new FileSet {
@@ -3521,7 +3522,7 @@ class Blubb
       val nathalie = benjamin.copy(name = "Nathalie", age = 1).copy(age = 2)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("age"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("age") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex14() = new FileSet {
@@ -3539,7 +3540,7 @@ class Blubb
       val nathalie = benjamin.copy(age = 2)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("age"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("age") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex15() = new FileSet {
@@ -3555,7 +3556,7 @@ class Blubb
       val benjamin = Elefant(name = "Benjamin", age = 12).copy(age = 3)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("age"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("age") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex16() = new FileSet {
@@ -3571,7 +3572,7 @@ class Blubb
       chainMe(xxx = 2).chainMe(xxx = 9, a = 2)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex17() = new FileSet {
@@ -3587,7 +3588,7 @@ class Blubb
       chainMe(b = 2).chainMe(b = 9, xxx = 2)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex18() = new FileSet {
@@ -3607,7 +3608,7 @@ class Blubb
       }
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 
   @Test
   def testRenameWithNamedArgs1002501Ex19() = new FileSet {
@@ -3627,7 +3628,7 @@ class Blubb
       }
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("zzz"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("zzz") _)
 
   @Test
   def testRenameWithNamedArgs1002572Ex1() = new FileSet {
@@ -3645,7 +3646,7 @@ class Blubb
       val b = this.abc
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("abc"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("abc") _)
 
   @Test
   def testRenameWithNamedArgs1002572Ex2() = new FileSet {
@@ -3665,7 +3666,7 @@ class Blubb
       }
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 
   @Test
   def testRenameWithNamedArgs1002572Ex3() = new FileSet {
@@ -3697,7 +3698,7 @@ class Blubb
       println(nested.lion)
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("lion"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("lion") _)
 
   @Test
   def testRenameWithNamedArgs1002572Ex4() = new FileSet {
@@ -3717,7 +3718,7 @@ class Blubb
       }
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 
   @Test
   def testRenameWithPrivateClassVal() = new FileSet {
@@ -3731,7 +3732,7 @@ class Blubb
       private val /*(*/ups/*)*/ = 42
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithPrivateClassCtorParam() = new FileSet {
@@ -3741,7 +3742,7 @@ class Blubb
     """
     class SomeClass private (/*(*/ups/*)*/: Int)
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithProtectedClassCtorParam() = new FileSet {
@@ -3751,7 +3752,7 @@ class Blubb
     """
     class SomeClass protected (/*(*/ups/*)*/: Int)
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   /*
    * See Assembla Ticket 1002651
@@ -3770,7 +3771,7 @@ class Blubb
       val bug = f"?ups"
     }
     """.replace("?", "$") -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithInterpolatedString1002651Ex2() = new FileSet {
@@ -3798,7 +3799,7 @@ class Blubb
       val thisWorkedBefore = s"Please ?franzi like you did before"
     }
     """.replace("?", "$") -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("franzi"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("franzi") _)
 
   /*
    * See Assembla Ticket 1002650
@@ -3823,7 +3824,7 @@ class Blubb
       }
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithForComprehensions1002650Ex2() = new FileSet {
@@ -3845,7 +3846,7 @@ class Blubb
       }
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithForComprehensions1002650Ex3() = new FileSet {
@@ -3867,7 +3868,7 @@ class Blubb
       }
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithForComprehensions1002650Ex4() = new FileSet {
@@ -3897,7 +3898,7 @@ class Blubb
       }
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithForComprehensions1002650Ex5() = new FileSet {
@@ -3927,7 +3928,7 @@ class Blubb
       }
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   /*
    * See Assembla Ticket 1002680
@@ -3957,7 +3958,7 @@ class Blubb
       @AnAnnotation(value1 = classOf[HumptyDumpty])
       class SomeClass
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("HumptyDumpty"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("HumptyDumpty") _)
 
   @Ignore("Needs compiler support")
   @Test
@@ -3984,14 +3985,14 @@ class Blubb
       @AnAnnotation(value3 = CheshireCat)
       class SomeClass
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("CheshireCat"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("CheshireCat") _)
 
   @Test
   def testRenameScalaAnnotationArgs1002680Ex1() = new FileSet {
     """
     final class SomeScalaAnnotation(value1: Int = 23, value2: Class[_] = classOf[String])
       extends annotation.StaticAnnotation
-    """ isNotModified()
+    """.isNotModified()
 
     """
     object RenameBug3 {
@@ -4007,14 +4008,14 @@ class Blubb
       @SomeScalaAnnotation(value1 = Caterpillar)
       class SomeClass
     }""" -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Caterpillar"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Caterpillar") _)
 
   @Test
   def testRenameScalaAnnotationArgs1002680Ex2() = new FileSet {
     """
     final class SomeScalaAnnotation(value1: Int = 23, value2: Class[_] = classOf[String])
       extends annotation.StaticAnnotation
-    """ isNotModified()
+    """.isNotModified()
 
     """
     object RenameBug4 {
@@ -4030,7 +4031,7 @@ class Blubb
       @SomeScalaAnnotation(value2 = classOf[Hatter])
       class ImInnocent
     }""" -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Hatter"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Hatter") _)
 
 
   /*
@@ -4050,7 +4051,7 @@ class Blubb
       ups = ups + 1
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameVarWithUnderscore1002674() = new FileSet {
@@ -4066,7 +4067,7 @@ class Blubb
       ups = ups + 1
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameValWithUnderscore1002674() = new FileSet {
@@ -4082,7 +4083,7 @@ class Blubb
       val x = ups
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   /*
    * See Assembla Ticket 1002803
@@ -4099,7 +4100,7 @@ class Blubb
       def alias = ups
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithSelfReference1002803v2() = new FileSet {
@@ -4113,7 +4114,7 @@ class Blubb
       def alias = /*(*/ups/*)*/
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithSelfReferenceAndOrdinaryThis1002803() = new FileSet {
@@ -4129,7 +4130,7 @@ class Blubb
       def heinz = this
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenameWithSelfReferenceAndNestedTraits1002803() = new FileSet {
@@ -4167,7 +4168,7 @@ class Blubb
       val alias = renameMe
     }
     """ -> TaggedAsLocalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("hanneloreHostasch"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("hanneloreHostasch") _)
 
   /*
    * See Assembla Ticket 1002677
@@ -4198,7 +4199,7 @@ class Blubb
 
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("wasser"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("wasser") _)
 
   @Test
   def testRenameWithQualifiedSelfTypes1002677v2() = new FileSet {
@@ -4226,7 +4227,7 @@ class Blubb
 
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Laus"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Laus") _)
 
   @Test
   def testRenameWithQualifiedSelfTypes1002677v3() = new FileSet {
@@ -4254,7 +4255,7 @@ class Blubb
 
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Teufel"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Teufel") _)
 
   @Test
   def testRenameWithQualifiedSelfTypes1002677v4() = new FileSet {
@@ -4282,7 +4283,7 @@ class Blubb
 
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Teufel"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Teufel") _)
 
   @Test
   def testRenameWithQualifiedSelfTypes1002677v5() = new FileSet {
@@ -4316,7 +4317,7 @@ class Blubb
 
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("Ups") _)
 
   @Test
   def testRenameWithQualifiedSelfTypes1002677v6() = new FileSet {
@@ -4350,7 +4351,7 @@ class Blubb
 
     }
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenamePackage1002769v1() = new FileSet {
@@ -4364,7 +4365,7 @@ class Blubb
 
     class Franzi
     """ -> TaggedAsGlobalRename
-  } prepareAndApplyRefactoring(prepareAndRenameTo("lausbub"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("lausbub") _)
 
   @Test
   def testRenamePackage1002769v2() = new FileSet {
@@ -4455,7 +4456,7 @@ class Blubb
       }
     }
     """
-  } prepareAndApplyRefactoring(prepareAndRenameTo("ups"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("ups") _)
 
   @Test
   def testRenamePackage1002769v3() = new FileSet {
@@ -4469,7 +4470,7 @@ class Blubb
 
     class Lausbub
     """ -> "renamed/Lausbub.scala"
-  } prepareAndApplyRefactoring(prepareAndRenameTo("renamed"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("renamed") _)
 
   @Test
   def testRenamePackage1002769v4() = new FileSet {
@@ -4483,7 +4484,7 @@ class Blubb
 
     class Lausbub
     """ -> "rename/xxx/Lausbub.scala"
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 
   @Test
   def testRenamePackage1002769v5() = new FileSet {
@@ -4501,7 +4502,7 @@ class Blubb
       class Lausbub
     }
     """ -> "rename/xxx/package.scala"
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 
   @Test
   def testRenamePackage1002769v6() = new FileSet {
@@ -4561,8 +4562,8 @@ class Blubb
     package one.library
 
     class Indifferent
-    """ isNotModified()
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+    """.isNotModified()
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 
   @Test
   def testRenamePackage1002769v7() = new FileSet {
@@ -4599,7 +4600,7 @@ class Blubb
       class Mischief
     }
     """ -> "a/b/Mischief.scala"
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 
   @Test
   def testRenamePackage1002769v8() = new FileSet {
@@ -4615,6 +4616,6 @@ class Blubb
     }
     package b { }
     """ -> "a/A.scala"
-  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx"))
+  } prepareAndApplyRefactoring(prepareAndRenameTo("xxx") _)
 }
 

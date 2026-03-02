@@ -20,7 +20,7 @@ trait CompilationUnitDependencies extends CompilerApiExtensions with ScalaVersio
       val namePos = t.namePosition()
 
       def nameIsNotFromImportAlias = {
-        val nameInSource = t.pos.source.content.view(namePos.start, namePos.end).mkString("")
+        val nameInSource = t.pos.source.content.slice(namePos.start, namePos.end).mkString("")
         nameInSource == t.nameString
       }
 

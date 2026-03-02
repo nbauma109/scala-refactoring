@@ -10,6 +10,7 @@ import org.junit.Assert._
 import analysis.GlobalIndexes
 import analysis.TreeAnalysis
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class TreeAnalysisTest extends TestHelper with GlobalIndexes with TreeAnalysis {
 
   import global._

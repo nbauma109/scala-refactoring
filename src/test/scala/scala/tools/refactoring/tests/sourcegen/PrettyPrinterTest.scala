@@ -11,6 +11,7 @@ import tools.nsc.symtab.Flags
 import tools.nsc.ast.parser.Tokens
 import scala.reflect.internal.util.BatchSourceFile
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class PrettyPrinterTest extends TestHelper {
 
   import global._

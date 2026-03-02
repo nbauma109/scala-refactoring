@@ -301,7 +301,7 @@ object SourceWithMarker {
       else SimpleMovementHelpers.or(this.backward, other.backward)(sourceWithMarker)
     }
 
-    final def ||(other: Movement) = this | other
+    final def ||(other: Movement): Movement = this | other
 
     final override def zeroOrMore = Movement { (sourceWithMarker, forward) =>
       val mvnt = if (forward) self else self.backward

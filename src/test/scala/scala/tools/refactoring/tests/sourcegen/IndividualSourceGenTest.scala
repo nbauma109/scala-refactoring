@@ -13,6 +13,7 @@ import tools.nsc.symtab.Flags
 
 import language.implicitConversions
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class IndividualSourceGenTest extends TestHelper {
 
   import global._

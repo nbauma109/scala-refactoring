@@ -19,7 +19,7 @@ object PositionDebugging {
 
   def format(start: Int, end: Int, source: Array[Char]): String = {
     def slice(start: Int, end: Int): String = {
-      source.view(start, end).mkString("").replace("\r\n", "\\r\\n").replace("\n", "\\n")
+      source.slice(start, end).mkString("").replace("\r\n", "\\r\\n").replace("\n", "\\n")
     }
 
     val ctxChars = 10

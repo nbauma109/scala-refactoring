@@ -6,6 +6,7 @@ import tests.util.TestHelper
 import tests.util.TestRefactoring
 
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class SplitParameterListsTest extends TestHelper with TestRefactoring {
 
   def splitParameterLists(splitPositions: List[List[Int]])(pro: FileSet) = new TestRefactoringImpl(pro) {

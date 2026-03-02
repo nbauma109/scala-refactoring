@@ -34,18 +34,12 @@ trait UnusedImportsFinder extends SourceGenerator with CompilerAccess with TreeT
       unit.depends.filterNot { s =>
 
         /*
-         * In interactive mode, the compiler contains more information (constants are not inlined) and
-         * we can analyze more correctly.  In non-interactive use, we currently don't have a way to do
-         * this, so we prefer to get false negatives instead of false positives.
-         *
-         * This way, when this trait is used during organize imports, an import that was previously
-         * not detected by the compiler's code analysis can now be removed.
-         * */
+         * The refactoring library always runs with the interactive compiler.
+         * Filtering out module classes keeps import analysis conservative and
+         * avoids false positives for constants and synthetic compiler symbols.
+         */
 
-        if(global.forInteractive)
-          s == NoSymbol || s.isModuleClass
-        else
-          s == NoSymbol
+        s == NoSymbol || s.isModuleClass
       }.toList
     }
 

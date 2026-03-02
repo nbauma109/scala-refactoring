@@ -4,8 +4,10 @@ import scala.tools.refactoring.tests.util.TestHelper
 import scala.tools.refactoring.implementations.extraction.Extractions
 import org.junit.Assert._
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ExtractionsTest extends TestHelper with Extractions {
   @Test
+  @ScalaVersion(matches = "2.11")
   def findExtractionTargets() = {
     val s = toSelection("""
       object O{

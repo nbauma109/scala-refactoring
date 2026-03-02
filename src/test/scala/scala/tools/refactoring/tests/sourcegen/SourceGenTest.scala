@@ -12,6 +12,7 @@ import tools.nsc.ast.parser.Tokens
 
 import language.postfixOps
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class SourceGenTest extends TestHelper {
 
   import global._
@@ -1635,6 +1636,7 @@ class SourceGenTest extends TestHelper {
   }
 
   @Test
+  @ScalaVersion(matches = "2.11")
   def testConsOperator() = {
     val code = """
       object ConsClient{

@@ -2,7 +2,8 @@
 
 The Scala Refactoring Library implements IDE independent refactoring support
 for Scala. It is currently used by both [ENSIME](https://github.com/ensime)
-and [ScalaIDE](http://scala-ide.org/) and supports Scala-2.10 and Scala-2.11.
+and [ScalaIDE](https://nbauma109.github.io/scala-ide/) and supports Scala 2.12
+and Scala 2.13.
 
 ## Information for Contributors
 
@@ -37,7 +38,7 @@ Refactorings are implemented on top of
 [ASTs](https://docs.scala-lang.org/overviews/reflection/symbols-trees-types.html) 
 from the Scala Presentation Compiler. If you plan to work on the library, you
 should definitely take a look at
-[Mirko Stockers Master Theses](https://github.com/scala-ide/scala-refactoring/raw/thesis-documentation/scala-refactoring.pdf).
+[Mirko Stockers Master Theses](https://github.com/nbauma109/scala-refactoring/raw/thesis-documentation/scala-refactoring.pdf).
 Although somewhat outdated, this document is very helpful for
 understanding the inner workings of the library. Another thing to look at is
 the [presentation](https://youtu.be/Josjt_awx08) about the Refactoring Library given
@@ -50,13 +51,13 @@ All changes to the library are expected to be thoroughly covered by unit tests,
 unless there is a very good reason for violating this rule. Often however, you
 also want to see the effect of your changes in an interactive environment. If
 you are using
-[ScalaIDE Nightly Builds](http://scala-ide.org/download/nightly.html), there
+[ScalaIDE Nightly Builds](https://nbauma109.github.io/scala-ide/download/nightly.html), there
 are two ways to run the IDE with your custom modifications, both with their
 own drawbacks and advantages:
 
 * You can run ScalaIDE from within Eclipse, as outlined 
-   [here](http://scala-ide.org/docs/dev/setup/setup.html#run-the-scala-ide-within-eclipse).
-   The [Equinox Weaving Launcher](https://github.com/scala-ide/equinox-weaving-launcher)
+   [here](https://nbauma109.github.io/scala-ide/docs/dev/setup/setup.html#run-the-scala-ide-within-eclipse).
+   The [Equinox Weaving Launcher](https://github.com/nbauma109/equinox-weaving-launcher)
    will automatically pick up the local version of the Refactoring Library, if
    the library is properly configured as an Eclipse project.
 
@@ -68,7 +69,7 @@ own drawbacks and advantages:
    * Disadvantages: 
       * Not suitable if you want to see the effect of your changes in a production environment
 * You can patch your
-   [ScalaIDE Nightly](http://scala-ide.org/download/nightly.html) installation
+   [ScalaIDE Nightly](https://nbauma109.github.io/scala-ide/download/nightly.html) installation
    with a local build of the refactoring library, generated with 
    `$ sbt package`. Take a look at [patch-ide.bash](patch-ide.bash) to see
    how this is done.
@@ -102,13 +103,14 @@ to a file. This can be done by setting the system property
 
 ### Building
 
-Use `$ sbt package` to build the library for Scala-2.11, or `$ sbt +package` to
-build it both for Scala-2.11 and Scala-2.10.
+Use `$ sbt package` to build the library for the default stream (Scala 2.12.21),
+or `$ sbt +package` to build all maintained streams (Scala 2.12.21 and Scala
+2.13.18).
 
 ### Publishing
 
-In order to publish sbt is used. The project is cross compiled against Scala 2.10
-and 2.11. To test a release run sbt and type:
+In order to publish sbt is used. The project is cross compiled against Scala
+2.12.21 and 2.13.18. To test a release run sbt and type:
 ```
 > + publishLocalSigned
 ```

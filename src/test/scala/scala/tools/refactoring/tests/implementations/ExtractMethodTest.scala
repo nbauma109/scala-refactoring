@@ -10,6 +10,7 @@ import implementations.ExtractMethod
 import tests.util.TestHelper
 
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ExtractMethodTest extends TestHelper with TestRefactoring {
 
   def extract(name: String)(pro: FileSet) = new TestRefactoringImpl(pro) {

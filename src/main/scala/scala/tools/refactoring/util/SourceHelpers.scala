@@ -38,7 +38,7 @@ object SourceHelpers {
             if (i >= text.length) {
               true
             } else {
-              if (text.charAt(i) != selection.source.charAt(start + i)) {
+              if (text.charAt(i) != selection.source(start + i)) {
                 false
               } else {
                 matchSlice(i + 1)

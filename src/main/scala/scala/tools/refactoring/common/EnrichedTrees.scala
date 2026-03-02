@@ -769,9 +769,6 @@ trait EnrichedTrees extends TracingImpl {
       case SingletonTypeTree(ref) =>
         ref :: Nil
 
-      case AssignOrNamedArg(lhs, rhs) =>
-        lhs :: rhs :: Nil
-
       case NamedArgument(nme, rhs) =>
         nme :: rhs :: Nil
 

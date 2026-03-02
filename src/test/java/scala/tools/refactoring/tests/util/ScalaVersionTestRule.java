@@ -16,20 +16,28 @@ public class ScalaVersionTestRule implements MethodRule {
     }
   }
 
+  private boolean shouldRun(ScalaVersion onlyOn, String versionString) {
+    if (onlyOn == null) {
+      return true;
+    }
+    if (!onlyOn.doesNotMatch().isEmpty() && versionString.contains(onlyOn.doesNotMatch())) {
+      return false;
+    } else {
+      return versionString.contains(onlyOn.matches());
+    }
+  }
+
   public Statement apply(Statement stmt, FrameworkMethod meth, Object arg2) {
-    ScalaVersion onlyOn = meth.getAnnotation(ScalaVersion.class);
+    ScalaVersion onlyOnMethod = meth.getAnnotation(ScalaVersion.class);
+    ScalaVersion onlyOnClass = arg2 == null ? null : arg2.getClass().getAnnotation(ScalaVersion.class);
     String versionString = Properties.versionString();
 
-    if (onlyOn != null) {
-      if (!onlyOn.doesNotMatch().isEmpty() && versionString.contains(onlyOn.doesNotMatch())) {
-        return new EmptyStatement();
-      } else if (versionString.contains(onlyOn.matches())) {
-        return stmt;
-      } else {
-        return new EmptyStatement();
-      }
-    } else {
-      return stmt;
+    if (!shouldRun(onlyOnClass, versionString)) {
+      return new EmptyStatement();
     }
+    if (!shouldRun(onlyOnMethod, versionString)) {
+      return new EmptyStatement();
+    }
+    return stmt;
   }
 }

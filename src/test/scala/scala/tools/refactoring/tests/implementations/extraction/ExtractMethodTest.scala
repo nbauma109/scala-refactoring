@@ -5,6 +5,7 @@ import implementations.extraction.ExtractMethod
 import tests.util.TestHelper
 import tests.util.TestRefactoring
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ExtractMethodTest extends TestHelper with TestRefactoring {
   def extract(extractionIdx: Int)(pro: FileSet) = {
     val testRefactoring = new TestRefactoringImpl(pro) {

@@ -244,7 +244,7 @@ class RegionTransformationsContext[G <: Global](val global: G) extends Compilati
                 imp
               case imp => imp
             }.map {
-              case imp @ RegionImport(expr, sels) if isApplicable(expr, sels, types) =>
+              case imp @ RegionImport(expr, sels) if isApplicable(expr, sels, types.toSeq) =>
                 types ++= expr.tpe.members.map { _.name }.toSet
                 val selectorsToWildcard = (formatting: Formatting, prefixSuffix: (String, String)) => {
                   val (prefix, _) = imp.printTransform(formatting, prefixSuffix)

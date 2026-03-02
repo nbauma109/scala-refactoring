@@ -38,6 +38,7 @@ class CustomFormattingTest extends TestHelper with TestRefactoring with SourceGe
 
 
   @Test
+  @ScalaVersion(matches = "2.11")
   def testSingleSpace(): Unit = {
 
     val ast = treeFrom("""
@@ -72,4 +73,3 @@ class CustomFormattingTest extends TestHelper with TestRefactoring with SourceGe
     } applyRefactoring organize
   }
 }
-

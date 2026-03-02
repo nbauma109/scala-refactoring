@@ -10,6 +10,7 @@ import tests.util.TestHelper
 import org.junit.Assert._
 import scala.tools.refactoring.tests.util.TextSelections
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class MarkOccurrencesTest extends TestHelper {
   outer =>
 

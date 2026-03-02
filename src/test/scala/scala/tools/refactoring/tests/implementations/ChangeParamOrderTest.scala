@@ -6,6 +6,7 @@ import tests.util.TestHelper
 import tests.util.TestRefactoring
 
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ChangeParamOrderTest extends TestHelper with TestRefactoring {
 
   def changeParamOrder(permutations: List[List[Int]])(pro: FileSet) = new TestRefactoringImpl(pro) {

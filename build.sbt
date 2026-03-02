@@ -1,56 +1,36 @@
 name := "org.scala-refactoring.library"
-version := "0.14.0-SNAPSHOT"
-scalaVersion := "2.12.3"
+version := "1.0.0-SNAPSHOT"
+scalaVersion := "2.12.21"
 moduleName := name.value
-organization := "org.scala-refactoring"
-crossScalaVersions := Seq("2.10.6", "2.11.8", scalaVersion.value)
+organization := "io.github.nbauma109"
+crossScalaVersions := Seq("2.12.21", "2.13.18")
 crossVersion := CrossVersion.full
 fork := true
 parallelExecution in Test := false
 autoAPIMappings := true
 
 libraryDependencies ++= Seq(
-  "org.scala-lang"  % "scala-compiler"    % scalaVersion.value,
-  "com.novocode"    % "junit-interface"   % "0.10"              % "test"
+  "org.scala-lang" % "scala-compiler" % scalaVersion.value,
+  "com.novocode" % "junit-interface" % "0.11" % Test
 )
+
 libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
   case Some((2, 12)) => Seq(
-    "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"
+    "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.7"
   )
-  case _             => Nil
+  case Some((2, 13)) => Seq(
+    "org.scala-lang.modules" %% "scala-parser-combinators" % "2.4.0"
+  )
+  case _ => Nil
 })
 
-scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
-  case Some((2, 11)) => Seq(
-    "-deprecation:false",
-    "-encoding", "UTF-8",
-    "-feature",
-    "-language:_",
-    "-unchecked",
-    "-Xlint",
-    "-Xfuture",
-    "-Xfatal-warnings",
-    "-Yno-adapted-args",
-    "-Ywarn-dead-code",
-    "-Ywarn-unused-import",
-    "-Ywarn-unused"
-  )
-  case Some((2, 12)) => Seq(
-    "-deprecation:false",
-    "-encoding", "UTF-8",
-    "-feature",
-    "-language:_",
-    "-unchecked",
-    "-Xlint",
-    "-Xfuture",
-    "-Xfatal-warnings",
-    "-Yno-adapted-args",
-    "-Ywarn-dead-code",
-    "-Ywarn-unused-import",
-    "-Ywarn-unused:-patvars,-params,-implicits,_"
-  )
-  case _ => Seq()
-})
+scalacOptions ++= Seq(
+  "-deprecation:false",
+  "-encoding", "UTF-8",
+  "-feature",
+  "-language:_",
+  "-unchecked"
+)
 
 Seq(Compile, Test).flatMap { config =>
   inConfig(config) {
@@ -69,11 +49,12 @@ publishTo := {
   if (isSnapshot.value)
     Some("snapshots" at s"$nexus/content/repositories/snapshots")
   else
-    Some("releases"  at s"$nexus/service/local/staging/deploy/maven2")
+    Some("releases" at s"$nexus/service/local/staging/deploy/maven2")
 }
 publishArtifact in Test := false
+publishArtifact in (Compile, packageDoc) := false
 pomExtra := (
- <url>http://scala-refactoring.org</url>
+  <url>https://github.com/nbauma109/scala-refactoring</url>
   <licenses>
     <license>
       <name>Scala License</name>
@@ -82,10 +63,10 @@ pomExtra := (
     </license>
   </licenses>
   <scm>
-    <connection>scm:git:https://github.com/scala-ide/scala-refactoring.git</connection>
-    <developerConnection>scm:git:git@github.com:scala-ide/scala-refactoring.git</developerConnection>
+    <connection>scm:git:https://github.com/nbauma109/scala-refactoring.git</connection>
+    <developerConnection>scm:git:git@github.com:nbauma109/scala-refactoring.git</developerConnection>
     <tag>master</tag>
-    <url>https://github.com/scala-ide/scala-refactoring</url>
+    <url>https://github.com/nbauma109/scala-refactoring</url>
   </scm>
   <developers>
     <developer>
@@ -93,7 +74,8 @@ pomExtra := (
       <name>Mirko Stocker</name>
       <email>me@misto.ch</email>
     </developer>
-  </developers>)
+  </developers>
+)
 
 credentials ++= {
   val config = Path.userHome / ".m2" / "credentials"
@@ -106,6 +88,8 @@ credentials ++= {
   }.toSeq
 }
 
+import scala.sys.process._
+
 // sbt doesn't automatically load the content of the MANIFST.MF file, therefore
 // we have to do it here by ourselves. Furthermore, the version format in the
 // MANIFEST.MF is `version.qualifier`, which means that we have to replace
@@ -113,7 +97,8 @@ credentials ++= {
 // otherwise OSGi can't find out which nightly build is newest and therefore
 // not all caches are updated with the correct version of a nightly.
 packageOptions in Compile in packageBin += {
-  val m = Using.fileInputStream(new java.io.File("MANIFEST.MF.prototype")) { in =>
+  val in = new java.io.FileInputStream(new java.io.File("MANIFEST.MF.prototype"))
+  val m = try {
     val manifest = new java.util.jar.Manifest(in)
     val attr = manifest.getMainAttributes
     val key = "Bundle-Version"
@@ -131,6 +116,6 @@ packageOptions in Compile in packageBin += {
     val sha = "git rev-parse --short HEAD".!!.trim
     attr.putValue(key, attr.getValue(key).replace("version.qualifier", s"$v.$versionSuffix-$date-$sha"))
     manifest
-  }
+  } finally in.close()
   Package.JarManifest(m)
 }

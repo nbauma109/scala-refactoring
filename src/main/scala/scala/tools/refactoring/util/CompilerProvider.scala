@@ -24,18 +24,26 @@ class CompilerInstance {
 
     // find the jar that has class `className`
     def codeSource(className: String) = Class.forName(className).getProtectionDomain.getCodeSource
+    def codeSourceOpt(className: String) = {
+      try Some(codeSource(className))
+      catch {
+        case _: ClassNotFoundException => None
+      }
+    }
 
     val scalaLibrarySource = codeSource("scala.Unit")
 
     // is null in Eclipse/OSGI but luckily we don't need it there
     if (scalaLibrarySource != null) {
-      val scalaXmlSource = codeSource("scala.xml.Elem")
-      val scalaParsingSource = codeSource("scala.util.parsing.combinator.JavaTokenParsers")
       val scalaCompilerSource = codeSource("scala.tools.nsc.Global")
+      val scalaXmlSource = codeSourceOpt("scala.xml.Elem")
+      val scalaParsingSource = codeSourceOpt("scala.util.parsing.combinator.JavaTokenParsers")
 
       assert((new File(scalaCompilerSource.getLocation.toURI)).exists, s"File ${scalaCompilerSource.getLocation.toExternalForm} does not exist")
 
-      val libraryJars = List(scalaCompilerSource, scalaLibrarySource, scalaXmlSource, scalaParsingSource).map(_.getLocation.toExternalForm).distinct // distinct to drop duplicate jars in non-modularized Scala verions (as of 2.11.0-M4, xml and util.parsing are in separate jars)
+      val libraryJars = (List(Some(scalaCompilerSource), Some(scalaLibrarySource), scalaXmlSource, scalaParsingSource).flatten)
+        .map(_.getLocation.toExternalForm)
+        .distinct // distinct to drop duplicate jars in non-modularized Scala verions (as of 2.11.0-M4, xml and util.parsing are in separate jars)
 
       libraryJars foreach { jarLocation =>
         settings.classpath.append(jarLocation)
@@ -45,10 +53,7 @@ class CompilerInstance {
       settings.processArgumentString("-usejavacp")
     }
 
-    val compiler = new Global(settings, new ConsoleReporter(settings) {
-      override def printMessage(pos: Position, msg: String): Unit = {
-      }
-    })
+    val compiler = new Global(settings, new ConsoleReporter(settings))
 
     try {
       compiler.ask { () =>
@@ -122,7 +127,7 @@ trait CompilerProvider extends TreeCreationMethods {
 
     global.checkNoResponsesOutstanding
 
-    global.reporter.reset()      // Hopefully a fix for https://github.com/scala-ide/scala-refactoring/issues/69
+    global.reporter.reset()      // Hopefully a fix for https://github.com/nbauma109/scala-refactoring/issues/69
     global.analyzer.resetTyper() // ... added for good measure.
   }
 }

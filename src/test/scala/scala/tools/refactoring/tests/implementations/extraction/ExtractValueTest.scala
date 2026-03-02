@@ -5,6 +5,7 @@ import implementations.extraction.ExtractValue
 import tests.util.TestHelper
 import tests.util.TestRefactoring
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ExtractValueTest extends TestHelper with TestRefactoring {
   outer =>
 

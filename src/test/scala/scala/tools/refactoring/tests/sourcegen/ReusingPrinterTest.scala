@@ -9,6 +9,7 @@ import scala.tools.refactoring.tests.util.TestHelper
 
 import org.junit.ComparisonFailure
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ReusingPrinterTest extends TestHelper {
 
   import global._

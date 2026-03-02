@@ -9,6 +9,7 @@ import tests.util.TestRefactoring
 import tests.util.TestHelper
 import scala.tools.refactoring.implementations.ExpandCaseClassBinding
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class ExpandCaseClassBindingTest extends TestHelper with TestRefactoring {
 
   def expand(pro: FileSet) = new TestRefactoringImpl(pro) {

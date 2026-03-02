@@ -225,7 +225,7 @@ trait MarkOccurrences extends common.Selections with analysis.Indexes with commo
           // later in the refactoring process. A precursor of this code pretended to be pure, by copying
           // dd and then calling 'mods.setPositions' on the copy. This had exactly the same (needed) side effects
           // however, as the Modifier object affected by setPositions was the same anyway. If you are interested
-          // in the related discussion, take a look at https://github.com/scala-ide/scala-refactoring/pull/78.
+          // in the related discussion, take a look at https://github.com/nbauma109/scala-refactoring/pull/78.
           dd.mods.setPositions(vd.asInstanceOf[ValDef].mods.positions)
         }
 

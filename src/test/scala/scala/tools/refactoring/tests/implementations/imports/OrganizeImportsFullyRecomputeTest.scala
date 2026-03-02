@@ -7,6 +7,7 @@ package tests.implementations.imports
 
 import scala.tools.refactoring.implementations.OrganizeImports
 
+@scala.tools.refactoring.tests.util.ScalaVersion(matches = "2.12")
 class OrganizeImportsFullyRecomputeTest extends OrganizeImportsBaseTest {
 
   def organize(pro: FileSet) = new OrganizeImportsRefatoring(pro) {
