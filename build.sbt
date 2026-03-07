@@ -1,7 +1,7 @@
 import xerial.sbt.Sonatype.sonatypeCentralHost
 
 name := "org.scala-refactoring.library"
-version := "1.0.1"
+version := "1.0.2"
 scalaVersion := "2.12.21"
 moduleName := name.value
 organization := "io.github.nbauma109"
