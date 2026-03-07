@@ -21,15 +21,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
-    - name: Set up JDK 17
+    - name: Set up JDK 8
       uses: actions/setup-java@v5
       with:
-        java-version: '17'
+        java-version: '8'
         distribution: 'temurin'
         cache: 'sbt'
     - uses: sbt/setup-sbt@v1
       with:
         sbt-runner-version: 1.10.2
-    - name: Run tests
+    - name: Run maintained stream builds
       shell: bash
-      run: sbt -v +test
+      run: |
+        sbt "++2.12.21!" clean test publishLocal
+        sbt "++2.13.18!" clean test publishLocal
