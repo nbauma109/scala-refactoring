@@ -109,11 +109,20 @@ jobs:
 
           sbt -batch \
             "set pgpPassphrase := Some(\"${PGP_PASSPHRASE}\".toCharArray)" \
+            "++2.12.21!" \
             clean \
-            +package \
-            +packageSrc \
-            +packageDoc \
-            +publishSigned
+            package \
+            packageSrc \
+            packageDoc \
+            publishSigned
+
+          sbt -batch \
+            "set pgpPassphrase := Some(\"${PGP_PASSPHRASE}\".toCharArray)" \
+            "++2.13.18!" \
+            package \
+            packageSrc \
+            packageDoc \
+            publishSigned
 
       - name: Upload Sonatype bundle with retry
         env:
