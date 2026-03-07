@@ -11,7 +11,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     defaults:
       run:
         shell: bash
@@ -90,7 +90,7 @@ jobs:
 
           printf '%s:6:\n' "${fingerprint}" | gpg --batch --import-ownertrust
 
-      - name: Publish signed artifacts to Sonatype bundle
+      - name: Stage signed artifacts locally
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
@@ -124,7 +124,7 @@ jobs:
             packageDoc \
             publishSigned
 
-      - name: Upload Sonatype bundle with retry
+      - name: Upload Sonatype bundle to Central Portal
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
@@ -139,22 +139,121 @@ jobs:
           echo "::add-mask::${SONATYPE_USERNAME}"
           echo "::add-mask::${SONATYPE_PASSWORD}"
 
-          attempt=1
-          max_attempts=3
-          delay_seconds=30
+          if ! command -v jq >/dev/null 2>&1; then
+            echo "jq is required but not available" >&2
+            exit 1
+          fi
 
-          while true; do
-            if sbt -batch sonatypeBundleRelease; then
-              break
-            fi
+          release_version="${GITHUB_REF_NAME#v}"
+          build_version="$(sed -n 's/^ThisBuild \\/ version := "\(.*\)"/\1/p' build.sbt | head -n 1)"
+          if [[ -z "${build_version}" ]]; then
+            echo "Unable to determine build version from build.sbt" >&2
+            exit 1
+          fi
 
-            if (( attempt >= max_attempts )); then
-              echo "sonatypeBundleRelease failed after ${attempt} attempts" >&2
-              exit 1
-            fi
+          if [[ "${release_version}" != "${build_version}" ]]; then
+            echo "Tag version ${release_version} does not match build.sbt version ${build_version}" >&2
+            exit 1
+          fi
 
-            echo "sonatypeBundleRelease attempt ${attempt} failed, retrying in ${delay_seconds}s..." >&2
-            sleep "${delay_seconds}"
-            attempt=$((attempt + 1))
-            delay_seconds=$((delay_seconds * 2))
+          staging_dir="target/sonatype-staging/${build_version}"
+          if [[ ! -d "${staging_dir}" ]]; then
+            echo "Expected staging directory ${staging_dir} does not exist" >&2
+            exit 1
+          fi
+
+          while IFS= read -r -d '' artifact; do
+            md5sum "${artifact}" | awk '{print $1}' > "${artifact}.md5"
+            sha1sum "${artifact}" | awk '{print $1}' > "${artifact}.sha1"
+          done < <(find "${staging_dir}" -type f \( -name '*.jar' -o -name '*.pom' \) ! -name '*.asc' -print0)
+
+          bundle_path="${RUNNER_TEMP}/scala-refactoring-${build_version}-bundle.zip"
+          rm -f "${bundle_path}"
+          (
+            cd "${staging_dir}"
+            zip -qr "${bundle_path}" .
+          )
+
+          bundle_size="$(wc -c < "${bundle_path}")"
+          if (( bundle_size > 1000000000 )); then
+            echo "Bundle size ${bundle_size} exceeds Sonatype Central 1GB limit" >&2
+            exit 1
+          fi
+
+          auth_token="$(printf '%s:%s' "${SONATYPE_USERNAME}" "${SONATYPE_PASSWORD}" | base64 | tr -d '\n')"
+          deployment_name="scala-refactoring-${build_version}"
+          upload_response="$(mktemp "${RUNNER_TEMP}/central-upload.XXXXXX")"
+          trap 'rm -f "${upload_response}" "${bundle_path}"' EXIT
+
+          http_code="$(
+            curl --silent --show-error \
+              --output "${upload_response}" \
+              --write-out '%{http_code}' \
+              --request POST \
+              --connect-timeout 30 \
+              --max-time 1800 \
+              --header "Authorization: Bearer ${auth_token}" \
+              --form "bundle=@${bundle_path};type=application/octet-stream" \
+              "https://central.sonatype.com/api/v1/publisher/upload?publishingType=AUTOMATIC&name=${deployment_name}"
+          )"
+
+          if [[ "${http_code}" != "201" ]]; then
+            echo "Central upload failed with HTTP ${http_code}" >&2
+            cat "${upload_response}" >&2
+            exit 1
+          fi
+
+          deployment_id="$(tr -d '\r\n' < "${upload_response}")"
+          if [[ -z "${deployment_id}" ]]; then
+            echo "Central upload did not return a deployment id" >&2
+            exit 1
+          fi
+
+          echo "Created deployment ${deployment_id}"
+
+          deadline=$((SECONDS + 1800))
+          publish_requested=0
+
+          while (( SECONDS < deadline )); do
+            status_json="$(
+              curl --fail --silent --show-error \
+                --request POST \
+                --header "Authorization: Bearer ${auth_token}" \
+                "https://central.sonatype.com/api/v1/publisher/status?id=${deployment_id}"
+            )"
+
+            deployment_state="$(printf '%s' "${status_json}" | jq -r '.deploymentState')"
+            echo "Deployment ${deployment_id} state: ${deployment_state}"
+
+            case "${deployment_state}" in
+              PENDING|VALIDATING|PUBLISHING)
+                sleep 15
+                ;;
+              VALIDATED)
+                if (( publish_requested == 0 )); then
+                  curl --fail --silent --show-error \
+                    --request POST \
+                    --header "Authorization: Bearer ${auth_token}" \
+                    "https://central.sonatype.com/api/v1/publisher/deployment/${deployment_id}" >/dev/null
+                  publish_requested=1
+                fi
+                sleep 15
+                ;;
+              PUBLISHED)
+                exit 0
+                ;;
+              FAILED)
+                echo "Central deployment failed" >&2
+                printf '%s\n' "${status_json}" | jq . >&2
+                exit 1
+                ;;
+              *)
+                echo "Unexpected deployment state: ${deployment_state}" >&2
+                printf '%s\n' "${status_json}" | jq . >&2
+                exit 1
+                ;;
+            esac
           done
+
+          echo "Timed out waiting for Central deployment ${deployment_id} to publish" >&2
+          exit 1

@@ -37,7 +37,11 @@ jobs:
         env:
           RELEASE_TYPE: ${{ inputs.release_type }}
         run: |
-          current_version="$(sed -n 's/^version := "\(.*\)"/\1/p' build.sbt | head -n 1)"
+          current_version="$(sed -n 's/^ThisBuild \\/ version := "\(.*\)"/\1/p' build.sbt | head -n 1)"
+          if [[ -z "${current_version}" ]]; then
+            echo "Unable to determine current version from build.sbt" >&2
+            exit 1
+          fi
           base_version="${current_version%-SNAPSHOT}"
 
           IFS='.' read -r major minor patch <<EOF
@@ -71,7 +75,7 @@ jobs:
             exit 1
           fi
 
-          perl -0pi -e 's/version := "[^"]+"/version := "'"${new_version}"'"/' build.sbt
+          perl -0pi -e 's/ThisBuild \\/ version := "[^"]+"/ThisBuild \\/ version := "'"${new_version}"'"/' build.sbt
 
           git add build.sbt
           git commit -m "Release ${new_tag}"

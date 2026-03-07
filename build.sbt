@@ -1,10 +1,15 @@
 import xerial.sbt.Sonatype.sonatypeCentralHost
 
-name := "org.scala-refactoring.library"
-version := "1.0.3"
-scalaVersion := "2.12.21"
+ThisBuild / name := "org.scala-refactoring.library"
+ThisBuild / version := "1.0.3"
+ThisBuild / scalaVersion := "2.12.21"
+ThisBuild / organization := "io.github.nbauma109"
+
+name := (ThisBuild / name).value
+version := (ThisBuild / version).value
+scalaVersion := (ThisBuild / scalaVersion).value
 moduleName := name.value
-organization := "io.github.nbauma109"
+organization := (ThisBuild / organization).value
 crossScalaVersions := Seq("2.12.21", "2.13.18")
 crossVersion := CrossVersion.full
 fork := true
