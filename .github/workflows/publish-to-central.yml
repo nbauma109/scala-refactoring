@@ -145,7 +145,7 @@ jobs:
           fi
 
           release_version="${GITHUB_REF_NAME#v}"
-          build_version="$(sed -n 's/^ThisBuild \\/ version := "\(.*\)"/\1/p' build.sbt | head -n 1)"
+          build_version="$(grep -m1 '^ThisBuild / version := "' build.sbt | cut -d'"' -f2)"
           if [[ -z "${build_version}" ]]; then
             echo "Unable to determine build version from build.sbt" >&2
             exit 1
