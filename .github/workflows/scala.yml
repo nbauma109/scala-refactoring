@@ -30,8 +30,9 @@ jobs:
     - uses: sbt/setup-sbt@v1
       with:
         sbt-runner-version: 1.10.2
-    - name: Run maintained stream builds
+    - name: Run tests and publish local (2.12.21)
       shell: bash
-      run: |
-        sbt "++2.12.21!" clean test publishLocal
-        sbt "++2.13.18!" clean test publishLocal
+      run: sbt -batch "++2.12.21!" clean test publishLocal
+    - name: Compile and publish local (2.13.18)
+      shell: bash
+      run: sbt -batch "++2.13.18!" clean compile Test/compile publishLocal

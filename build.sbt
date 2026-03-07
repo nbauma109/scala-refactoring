@@ -8,6 +8,7 @@ crossVersion := CrossVersion.full
 fork := true
 parallelExecution in Test := false
 autoAPIMappings := true
+Test / javaOptions += "-Dscala.tools.refactoring.silentReporter=true"
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-compiler" % scalaVersion.value,

@@ -11,12 +11,16 @@ import scala.tools.nsc.interactive.Global
 import scala.tools.nsc.io.AbstractFile
 import scala.tools.nsc.Settings
 import scala.tools.nsc.reporters.ConsoleReporter
+import scala.tools.nsc.reporters.StoreReporter
 import scala.reflect.internal.util.BatchSourceFile
 import scala.reflect.internal.util.SourceFile
 import scala.reflect.internal.util.Position
 import scala.reflect.internal.MissingRequirementError
 
 class CompilerInstance {
+
+  private def useSilentReporter: Boolean =
+    java.lang.Boolean.getBoolean("scala.tools.refactoring.silentReporter")
 
   lazy val compiler: Global = {
 
@@ -53,7 +57,11 @@ class CompilerInstance {
       settings.processArgumentString("-usejavacp")
     }
 
-    val compiler = new Global(settings, new ConsoleReporter(settings))
+    val reporter =
+      if (useSilentReporter) new StoreReporter
+      else new ConsoleReporter(settings)
+
+    val compiler = new Global(settings, reporter)
 
     try {
       compiler.ask { () =>
