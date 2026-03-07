@@ -90,7 +90,7 @@ jobs:
 
           printf '%s:6:\n' "${fingerprint}" | gpg --batch --import-ownertrust
 
-      - name: Publish signed artifacts to Maven Central
+      - name: Publish signed artifacts to Sonatype bundle
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
@@ -113,5 +113,39 @@ jobs:
             +package \
             +packageSrc \
             +packageDoc \
-            +publishSigned \
-            sonatypeBundleRelease
+            +publishSigned
+
+      - name: Upload Sonatype bundle with retry
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${SONATYPE_USERNAME}" || -z "${SONATYPE_PASSWORD}" ]]; then
+            echo "Missing Sonatype credentials" >&2
+            exit 1
+          fi
+
+          echo "::add-mask::${SONATYPE_USERNAME}"
+          echo "::add-mask::${SONATYPE_PASSWORD}"
+
+          attempt=1
+          max_attempts=3
+          delay_seconds=30
+
+          while true; do
+            if sbt -batch sonatypeBundleRelease; then
+              break
+            fi
+
+            if (( attempt >= max_attempts )); then
+              echo "sonatypeBundleRelease failed after ${attempt} attempts" >&2
+              exit 1
+            fi
+
+            echo "sonatypeBundleRelease attempt ${attempt} failed, retrying in ${delay_seconds}s..." >&2
+            sleep "${delay_seconds}"
+            attempt=$((attempt + 1))
+            delay_seconds=$((delay_seconds * 2))
+          done
