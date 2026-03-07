@@ -1,0 +1,56 @@
+name: GitHub Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v5
+        with:
+          java-version: "8"
+          distribution: "temurin"
+          cache: "sbt"
+
+      - uses: sbt/setup-sbt@v1
+        with:
+          sbt-runner-version: 1.10.2
+
+      - name: Build release artifacts
+        run: |
+          sbt -batch \
+            "++2.12.21!" clean package packageSrc packageDoc makePom \
+            "++2.13.18!" package packageSrc packageDoc makePom
+
+      - name: Create GitHub release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          mapfile -t artifacts < <(find target -type f \( -name '*.jar' -o -name '*.pom' \) | sort)
+
+          if [ "${#artifacts[@]}" -eq 0 ]; then
+            echo "No artifacts found to attach" >&2
+            exit 1
+          fi
+
+          if gh release view "${TAG_NAME}" >/dev/null 2>&1; then
+            gh release upload "${TAG_NAME}" --clobber "${artifacts[@]}"
+          else
+            gh release create "${TAG_NAME}" \
+              --title "${TAG_NAME}" \
+              --generate-notes \
+              "${artifacts[@]}"
+          fi

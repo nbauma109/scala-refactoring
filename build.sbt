@@ -1,3 +1,5 @@
+import xerial.sbt.Sonatype.sonatypeCentralHost
+
 name := "org.scala-refactoring.library"
 version := "1.0.0-SNAPSHOT"
 scalaVersion := "2.12.21"
@@ -43,16 +45,10 @@ Seq(Compile, Test).flatMap { config =>
 }
 
 publishMavenStyle := true
+ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 useGpg := true
-publishTo := {
-  val nexus = "https://oss.sonatype.org"
-  if (isSnapshot.value)
-    Some("snapshots" at s"$nexus/content/repositories/snapshots")
-  else
-    Some("releases" at s"$nexus/service/local/staging/deploy/maven2")
-}
+publishTo := sonatypePublishToBundle.value
 publishArtifact in Test := false
-publishArtifact in (Compile, packageDoc) := false
 pomExtra := (
   <url>https://github.com/nbauma109/scala-refactoring</url>
   <licenses>
@@ -78,13 +74,14 @@ pomExtra := (
 )
 
 credentials ++= {
+  val credentialHost = (ThisBuild / sonatypeCredentialHost).value
   val config = Path.userHome / ".m2" / "credentials"
   if (config.exists) Seq(Credentials(config))
   else {
     for {
       username <- sys.env.get("SONATYPE_USERNAME")
       password <- sys.env.get("SONATYPE_PASSWORD")
-    } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)
+    } yield Credentials("Sonatype Nexus Repository Manager", credentialHost, username, password)
   }.toSeq
 }
 

@@ -1,4 +1,5 @@
 addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.3.1")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.12.2")
 
 // We need to be able to not add the scoverage plugin to the scala-refactoring build.
 // This is necessary because scala-refactoring is built during Scala PR CI, which means
