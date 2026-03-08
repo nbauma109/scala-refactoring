@@ -18,7 +18,7 @@ class ExtractionsTest extends TestHelper with Extractions {
       }
     """)
 
-    TestCollector.collect(s)
+    collectExtractionTargets(s)
     assertEquals(2, TestCollector.extractionTargets.length)
   }
 
@@ -31,7 +31,7 @@ class ExtractionsTest extends TestHelper with Extractions {
       }
     """)
 
-    TestCollector.collect(s)
+    collectExtractionTargets(s)
     assertEquals(2, TestCollector.extractionTargets.length)
   }
 
@@ -45,9 +45,14 @@ class ExtractionsTest extends TestHelper with Extractions {
       }
     """)
 
-    TestCollector.collect(s)
+    collectExtractionTargets(s)
     assertEquals(1, TestCollector.extractionTargets.length)
   }
+
+  private def collectExtractionTargets(s: Selection) =
+    global.ask { () =>
+      TestCollector.collect(s)
+    }
 
   object TestCollector extends ExtractionCollector[Extraction] {
     var extractionTargets: List[ExtractionTarget] = Nil
