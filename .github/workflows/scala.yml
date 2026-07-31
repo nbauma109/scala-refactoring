@@ -27,7 +27,7 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
         cache: 'sbt'
-    - uses: sbt/setup-sbt@v1
+    - uses: sbt/setup-sbt@v1.5.5
       with:
         sbt-runner-version: 1.10.2
     - name: Run tests and publish local (2.12.21)
